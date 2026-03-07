@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fastreact"
+version = "0.1.0"
+description = "FastAPI + React unified stack — zero config, one server, Python tracebacks in browser"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.9"
+authors = [
+  { name = "Mohammad Ramiz", email = "your@email.com" }
+]
+keywords = [
+  "fastapi", "react", "fullstack", "vite", "uvicorn",
+  "flask", "spa", "single-page-app", "python", "javascript"
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Framework :: FastAPI",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Internet :: WWW/HTTP",
+  "Topic :: Software Development :: Libraries :: Application Frameworks",
+]
+
+dependencies = [
+  "fastapi>=0.100.0",
+  "uvicorn>=0.23.0",
+  "httpx>=0.24.0",
+]
+
+[project.optional-dependencies]
+flask = [
+  "flask>=2.3.0",
+]
+dev = [
+  "pytest>=7.0",
+  "pytest-asyncio>=0.21",
+  "httpx>=0.24.0",
+]
+
+[project.scripts]
+fastreact = "fastreact.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/RamizMohammad/fastreact"
+Issues = "https://github.com/RamizMohammad/fastreact/issues"
+Portfolio = "https://www.mohammadramiz.in"
+LinkedIn = "https://www.linkedin.com/in/mohammad-ramiz"
+"Source Code" = "https://github.com/RamizMohammad/fastreact"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["fastreact*"]
