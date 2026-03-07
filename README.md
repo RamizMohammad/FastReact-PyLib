@@ -3,6 +3,8 @@
 > **FastAPI + React = One Unified Stack**  
 > Zero config. One server. Python tracebacks in your browser.
 
+📖 **[Full Usage Guide →](USAGE.md)**
+
 ---
 
 ## What is FastReact?
@@ -12,6 +14,7 @@ FastReact is a Python library that bridges **FastAPI** and **React** into a sing
 - 🐍 FastAPI thinks it's serving Jinja templates — it's actually serving React
 - ⚡ React thinks it's a normal Vite app — it's tunneled through FastAPI
 - 🔴 Python errors appear as beautiful overlays in the browser (just like React's own error screen)
+- 🔒 Python is the gatekeeper — React can only visit routes you register
 - 🚀 One `uvicorn` instance serves everything — in dev AND production
 
 ---
@@ -19,31 +22,27 @@ FastReact is a Python library that bridges **FastAPI** and **React** into a sing
 ## Install
 
 ```bash
+# FastAPI + React
 pip install fastreact
+
+# Flask + React
+pip install fastreact[flask]
 ```
 
 ---
 
-## Scaffold a React Project
-
-Inside your FastAPI project directory:
+## Quick Start
 
 ```bash
+# 1. Scaffold React inside your FastAPI project
 fastreact create frontend
-```
 
-This runs `npm create vite@latest` under the hood and wires everything up automatically — proxy config, build output path, the works.
+# 2. Start both servers together with live request monitor
+fastreact dev main:app --reload --call
 
-```
-your-project/
-├── main.py              ← FastAPI entry point
-├── frontend/            ← React app (scaffolded by fastreact)
-│   ├── src/
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   ├── vite.config.js   ← pre-configured proxy to FastAPI
-│   └── package.json
-└── frontend_build/      ← React production build lands here
+# 3. Build for production
+cd frontend && npm run build
+uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
 ---
@@ -54,83 +53,121 @@ your-project/
 # main.py
 from fastreact import FastReact
 
-app = FastReact(
-    react_dir="frontend",       # where your React source lives
-    build_dir="frontend_build", # where npm run build outputs
-    dev=False,                  # set True in development
-    traceback_overlay=True,     # Python errors in browser
-)
+app = FastReact()
+
+# React page routes — /api/ prefix — browser only
+# Postman/curl → 405 Not Allowed
+@app.get("/api/")
+def home(): pass
 
 @app.get("/api/users")
+def users_page(): pass
+
+# Normal data routes — everyone can call
+@app.get("/users")
 def get_users():
     return {"users": ["Alice", "Bob"]}
-
-@app.get("/api/products")
-def get_products():
-    return {"products": ["Widget", "Gadget"]}
 ```
 
-Run it:
 ```bash
 uvicorn main:app --reload
 ```
 
 ---
 
-## Dev Mode
+## Flask Support
 
-Start both servers:
-
-```bash
-# Terminal 1 — FastAPI
-uvicorn main:app --reload
-
-# Terminal 2 — React dev server
-cd frontend && npm run dev
-```
-
-Enable dev mode in your app:
 ```python
-app = FastReact(dev=True)
+from fastreact import FlaskReact
+
+app = FlaskReact()
+
+@app.route("/api/users")
+def users_page(): pass
+
+@app.route("/users")
+def get_users():
+    return {"users": ["Alice", "Bob"]}
+
+if __name__ == "__main__":
+    app.run()
 ```
 
-React dev server runs on `:5173`, FastAPI on `:8000`.  
-FastReact tunnels API calls between them — **no CORS issues, ever**.
+---
+
+## Routing Rules
+
+| Route | Browser | Postman/curl |
+|-------|---------|--------------|
+| `/api/users` (react prefix) | ✅ React renders | ❌ 405 Not Allowed |
+| `/users` (normal route) | ✅ JSON | ✅ JSON |
+| `/api/unknown` (unregistered) | ❌ 404 | ❌ 404 |
+
+### Custom prefix
+
+```python
+app = FastReact(react_prefix="ui")   # /ui/... becomes React routes
+```
+
+---
+
+## CLI
+
+```
+fastreact create <n>               Scaffold a new React (Vite) app
+fastreact dev <file:app> [opts]    Start FastAPI + React dev servers together
+
+  --reload                         Auto-restart on file save
+  --port    <number>               Port number          default: 8000
+  --host    <address>              Host address         default: 127.0.0.1
+  --call                           Live HTTP request monitor
+```
 
 ---
 
 ## Traceback Overlay
 
-When a Python error occurs, instead of a plain JSON error, FastReact serves a beautiful error overlay in the browser:
+Python errors render as a beautiful browser overlay instead of JSON:
 
 ```
-┌─────────────────────────────────────────────┐
-│ 🔴 FastAPI Traceback — TypeError            │
-├─────────────────────────────────────────────┤
-│ 'NoneType' object has no attribute 'id'     │
-├─────────────────────────────────────────────┤
-│ File main.py, line 24                       │
-│ >> return db.query(User).filter(...)        │
-└─────────────────────────────────────────────┘
-```
+🔴 FastAPI Traceback — AttributeError
+'NoneType' object has no attribute 'id'
 
-Just like React's own error screen — but for Python! 🐍
+File main.py, line 24, in get_user
+    return user.id
+    ^^^^^^^^^^^^^^
+```
 
 ---
 
-## Deployment
+## Roadmap
 
-```bash
-# Build React
-cd frontend && npm run build
-# Builds to ../frontend_build automatically
+- [x] FastAPI + React unified stack
+- [x] Flask + React support
+- [x] CLI dev mode — one command starts everything
+- [x] Live request monitor (`--call`)
+- [x] Python traceback overlay in browser
+- [x] Route protection — browser-only React routes
+- [x] Auto path normalization
+- [ ] `--globalname` — instant public URL via SSH tunnel (v0.2.0)
 
-# Run in production
-uvicorn main:app --host 0.0.0.0 --port 8000
-```
+---
 
-With Docker + Nginx reverse proxy, your app becomes globally accessible.  
-**One server. One port. One command.**
+## Documentation
+
+| Guide | Description |
+|-------|-------------|
+| [USAGE.md](USAGE.md) | Full usage guide with all examples |
+| [PUBLISH.md](PUBLISH.md) | How to publish to PyPI |
+
+---
+
+## Author
+
+**Mohammad Ramiz**
+- 🌐 [mohammadramiz.in](https://www.mohammadramiz.in)
+- 💼 [LinkedIn](https://www.linkedin.com/in/mohammad-ramiz)
+- 🐙 [GitHub](https://github.com/RamizMohammad)
 
 ---
 
