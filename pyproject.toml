@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fastreact"
-version = "0.1.0"
+version = "0.1.1"
 description = "FastAPI + React unified stack — zero config, one server, Python tracebacks in browser"
 readme = "README.md"
 license = { text = "MIT" }
@@ -13,21 +13,75 @@ authors = [
   { name = "Mohammad Ramiz", email = "your@email.com" }
 ]
 keywords = [
-  "fastapi", "react", "fullstack", "vite", "uvicorn",
-  "flask", "spa", "single-page-app", "python", "javascript"
+  # Core identity
+  "fastreact", "fastapi", "react", "fullstack", "full-stack",
+
+  # FastAPI related
+  "fastapi-react", "fastapi-frontend", "fastapi-spa",
+  "fastapi-static", "fastapi-vite", "fastapi-fullstack",
+  "fastapi-react-integration", "fastapi-serve-react",
+
+  # Flask related
+  "flask", "flask-react", "flask-spa", "flask-frontend",
+  "flask-fullstack", "flask-vite",
+
+  # React related
+  "react", "reactjs", "react-fastapi", "react-python",
+  "react-flask", "react-spa", "react-vite",
+
+  # Python fullstack
+  "python-react", "python-fullstack", "python-spa",
+  "python-frontend", "python-javascript", "python-web",
+  "python-webdev", "python-fullstack-framework",
+
+  # Build tools
+  "vite", "uvicorn", "starlette",
+
+  # Concepts
+  "spa", "single-page-app", "single-page-application",
+  "unified-stack", "one-server", "zero-config",
+  "hot-reload", "hmr", "dev-server", "proxy",
+
+  # Error handling
+  "traceback", "error-overlay", "debug", "developer-tools",
+
+  # Routing
+  "react-router", "client-side-routing", "route-protection",
+
+  # Deployment
+  "production", "docker", "nginx", "deployment",
+
+  # General web
+  "web", "web-framework", "web-app", "webapp",
+  "javascript", "typescript", "frontend", "backend",
+  "api", "rest", "rest-api", "json",
+
+  # Developer experience
+  "dx", "developer-experience", "cli", "scaffold",
+  "boilerplate", "starter", "template"
 ]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Framework :: FastAPI",
+  "Framework :: Flask",
   "Intended Audience :: Developers",
   "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: JavaScript",
   "Topic :: Internet :: WWW/HTTP",
+  "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+  "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
   "Topic :: Software Development :: Libraries :: Application Frameworks",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Software Development :: User Interfaces",
+  "Topic :: Software Development :: Build Tools",
+  "Environment :: Web Environment",
+  "Natural Language :: English",
 ]
 
 dependencies = [

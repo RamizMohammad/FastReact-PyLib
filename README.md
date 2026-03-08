@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/RamizMohammad/fastreact/main/assets/logo.jpeg" width="150" />
+</p>
+
 # ⚡ FastReact
 
 > **FastAPI + React = One Unified Stack**  
